@@ -1,8 +1,10 @@
 from constants import *
 import pygame
 import player
-import path
+import wall
 import time
+import load_level
+
 
 pygame.init()
 
@@ -11,19 +13,18 @@ pygame.mouse.set_visible(False)
 surface = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
 
 player_group = pygame.sprite.Group()
-path_group = pygame.sprite.Group()
+map = load_level.Load_level()
+
+plyr = player.Player(32, 32)
+
+player_group.add(plyr)
 
 def main():
     global states
     running = True
     start = 0
 
-    plyr = player.Player(32, 32)
 
-    pth = path.Path(64, 64)
-
-    player_group.add(plyr)
-    path_group.add(pth)
 
 
     while running:
@@ -39,21 +40,41 @@ def main():
 
         draw()
         update()
-        print(time.time() - start)
 
     pygame.quit()
 
 def draw():
-    surface.fill((200, 200, 200))
-    path_group.draw(surface)
+    surface.fill((0, 0, 0))
     player_group.draw(surface)
+    map.get_blocks().draw(surface)
+    map.get_dots().draw(surface)
+    map.get_big_dots().draw(surface)
+    map.get_trap().draw(surface)
+    draw_scores()
 
 
     pygame.display.flip()
 
 def update():
-    player_group.update(path_group)
+    player_group.update(map.get_blocks(), map.get_dots(), map.get_big_dots())
+    # map.get_trap().update()
 
 
+def draw_scores():
+    message_display(str(plyr.score), GAME_WIDTH - 0.1 - FONT_SIZE, FONT_SIZE)
+
+
+
+def text_objects(text, font):
+    textSurface = font.render(text, True, (255, 255, 255))
+    return textSurface, textSurface.get_rect()
+
+
+
+def message_display(text, x, y):
+    largeText = pygame.font.Font('font.ttf',50)
+    TextSurf, TextRect = text_objects(text, largeText)
+    TextRect.center = (x, y)
+    surface.blit(TextSurf, TextRect)
 if __name__ == "__main__":
     main()

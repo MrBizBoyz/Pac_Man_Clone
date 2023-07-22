@@ -5,8 +5,8 @@ import player
 class Player(pygame.sprite.Sprite):
     def __init__(self, width, height):
         super().__init__()
-        self.x = GAME_WIDTH // 2
-        self.y = GAME_HEIGHT
+        self.x = 64
+        self.y = 64
 
         self.width = width
         self.height = height
@@ -14,7 +14,8 @@ class Player(pygame.sprite.Sprite):
         self.x_speed = self.speed
         self.y_speed = 0
         self.image = pygame.Surface([self.width, self.height])
-        self.image.fill((255, 255 ,255))
+        self.image.fill((255, 255 ,0))
+        self.score = 0
 
 
         self.rect = self.image.get_rect()
@@ -22,10 +23,10 @@ class Player(pygame.sprite.Sprite):
 
 
 
-    def update(self, path_group):
+    def update(self, map, dots, big_dots):
         self.key_input()
         self.move()
-        # self.collide(path_group)
+        self.collision(map, dots, big_dots)
 
 
 
@@ -47,14 +48,44 @@ class Player(pygame.sprite.Sprite):
             self.y_speed = -self.speed
 
         elif keys[pygame.K_DOWN]:
-
             self.x_speed = 0
             self.y_speed = self.speed
 
-    # def collide(self, path_group):
-    #     for p in path_group:
-    #         if self.rect.top >= p.rect.top:
-    #             return pygame.sprite.collide_rect(up, top)
+
+
+    def collision(self, map, dots, big_dots):
+        walls = pygame.sprite.spritecollide(self, map, False)
+
+        for wall in walls:
+            if self.rect.colliderect(wall.rect):
+                if self.rect.right > wall.rect.left and self.rect.left < wall.rect.left:
+                    self.rect.right = wall.rect.left
+
+                elif self.rect.left < wall.rect.right and self.rect.right > wall.rect.right:
+                    self.rect.left = wall.rect.right
+
+                if self.rect.bottom > wall.rect.top and self.rect.top < wall.rect.top:
+                    self.rect.bottom = wall.rect.top
+
+                elif self.rect.top < wall.rect.bottom and self.rect.bottom > wall.rect.bottom:
+                    self.rect.top = wall.rect.bottom
+
+        if pygame.sprite.spritecollide(self, dots, True):
+            self.score += 1
+
+        if pygame.sprite.spritecollide(self, big_dots, True):
+            self.score += 50
+            #create ghost
+
+
+
+
+
+
+
+
+
+
 
 
     def move(self):
