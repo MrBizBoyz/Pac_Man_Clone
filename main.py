@@ -1,6 +1,8 @@
 from constants import *
 import pygame
 import player
+import path
+import time
 
 pygame.init()
 
@@ -9,17 +11,23 @@ pygame.mouse.set_visible(False)
 surface = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
 
 player_group = pygame.sprite.Group()
+path_group = pygame.sprite.Group()
 
 def main():
     global states
     running = True
+    start = 0
 
-    # Create an instance of the Player class
-    player_instance = player.Player(64, 64)
-    # Add the player instance to the player_group
-    player_group.add(player_instance)
+    plyr = player.Player(32, 32)
+
+    pth = path.Path(64, 64)
+
+    player_group.add(plyr)
+    path_group.add(pth)
+
 
     while running:
+        start = time.time()
         clock.tick(TICK_RATE)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -31,16 +39,21 @@ def main():
 
         draw()
         update()
+        print(time.time() - start)
 
     pygame.quit()
 
 def draw():
     surface.fill((200, 200, 200))
+    path_group.draw(surface)
     player_group.draw(surface)
+
+
     pygame.display.flip()
 
 def update():
-    player_group.update()
+    player_group.update(path_group)
+
 
 if __name__ == "__main__":
     main()
