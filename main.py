@@ -50,6 +50,7 @@ def draw():
     map.get_dots().draw(surface)
     map.get_big_dots().draw(surface)
     map.get_trap().draw(surface)
+
     draw_scores()
 
 

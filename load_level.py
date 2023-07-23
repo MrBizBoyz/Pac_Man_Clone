@@ -12,6 +12,7 @@ class Load_level():
         self.dots = pygame.sprite.Group()
         self.big_dots = pygame.sprite.Group()
         self.trap = pygame.sprite.Group()
+
         self.level = "level.txt"
         self.load_level(self.level)
 
@@ -25,17 +26,21 @@ class Load_level():
                 for letter in line:
                     if letter == ",":
                         continue
+
+
                     if letter == "W":
                         self.blocks.add(wall.Wall(c * BLOCK_SIZE, r * BLOCK_SIZE, BLUE))
 
                     if letter == "-":
-                        self.dots.add(dots.Dots(c * BLOCK_SIZE + 10, r * BLOCK_SIZE + 10, WHITE))
+                        self.dots.add(dots.Dots(c * BLOCK_SIZE + 10, r * BLOCK_SIZE + 10, (255, 192, 203)))
 
                     if letter == "C":
-                        self.big_dots.add(big_dots.Big_dots(c * BLOCK_SIZE + 8 , r * BLOCK_SIZE + 8, WHITE))
+                        self.big_dots.add(big_dots.Big_dots(c * BLOCK_SIZE + 8 , r * BLOCK_SIZE + 8, (255, 192, 203)))
 
                     if letter == "T":
                         self.trap.add(ghost_trap.Trap(c * BLOCK_SIZE , r * BLOCK_SIZE, (255, 192, 203)))
+
+
 
 
                     c += 1

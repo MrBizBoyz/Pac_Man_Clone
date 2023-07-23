@@ -28,6 +28,9 @@ class Player(pygame.sprite.Sprite):
         self.move()
         self.collision(map, dots, big_dots)
 
+        if self.rect.right < 0:
+            self.rect.left = GAME_WIDTH -60
+
 
 
     def key_input(self):
@@ -56,6 +59,9 @@ class Player(pygame.sprite.Sprite):
     def collision(self, map, dots, big_dots):
         walls = pygame.sprite.spritecollide(self, map, False)
 
+
+
+
         for wall in walls:
             if self.rect.colliderect(wall.rect):
                 if self.rect.right > wall.rect.left and self.rect.left < wall.rect.left:
@@ -76,6 +82,15 @@ class Player(pygame.sprite.Sprite):
         if pygame.sprite.spritecollide(self, big_dots, True):
             self.score += 50
             #create ghost
+
+
+
+
+
+
+
+
+
 
 
 
