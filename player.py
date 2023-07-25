@@ -10,12 +10,14 @@ class Player(pygame.sprite.Sprite):
 
         self.width = width
         self.height = height
-        self.speed = 3
+        self.speed = 4.5
         self.x_speed = self.speed
         self.y_speed = 0
         self.image = pygame.Surface([self.width, self.height])
         self.image.fill((255, 255 ,0))
         self.score = 0
+        self.eat_ghost = False
+        self.killable = True
 
 
         self.rect = self.image.get_rect()
@@ -23,13 +25,16 @@ class Player(pygame.sprite.Sprite):
 
 
 
-    def update(self, map, dots, big_dots):
+    def update(self, map, dots, big_dots, ghost):
         self.key_input()
         self.move()
         self.collision(map, dots, big_dots)
 
         if self.rect.right < 0:
-            self.rect.left = GAME_WIDTH -60
+            self.rect.left = GAME_WIDTH -80
+
+        if self.rect.left > GAME_WIDTH -80:
+            self.rect.left = 0
 
 
 
@@ -77,29 +82,14 @@ class Player(pygame.sprite.Sprite):
                     self.rect.top = wall.rect.bottom
 
         if pygame.sprite.spritecollide(self, dots, True):
-            self.score += 1
+            self.score += 10
 
         if pygame.sprite.spritecollide(self, big_dots, True):
             self.score += 50
+            self.eat_ghost = True
+            self.killable = False
+
             #create ghost
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

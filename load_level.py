@@ -4,6 +4,7 @@ import wall
 import dots
 import big_dots
 import ghost_trap
+import ghost
 
 
 class Load_level():
@@ -11,8 +12,8 @@ class Load_level():
         self.blocks = pygame.sprite.Group()
         self.dots = pygame.sprite.Group()
         self.big_dots = pygame.sprite.Group()
+        self.ghost = pygame.sprite.Group()
         self.trap = pygame.sprite.Group()
-
         self.level = "level.txt"
         self.load_level(self.level)
 
@@ -26,13 +27,11 @@ class Load_level():
                 for letter in line:
                     if letter == ",":
                         continue
-
-
                     if letter == "W":
                         self.blocks.add(wall.Wall(c * BLOCK_SIZE, r * BLOCK_SIZE, BLUE))
 
                     if letter == "-":
-                        self.dots.add(dots.Dots(c * BLOCK_SIZE + 10, r * BLOCK_SIZE + 10, (255, 192, 203)))
+                        self.dots.add(dots.Dots(c * BLOCK_SIZE + 15, r * BLOCK_SIZE + 15, (255, 192, 203)))
 
                     if letter == "C":
                         self.big_dots.add(big_dots.Big_dots(c * BLOCK_SIZE + 8 , r * BLOCK_SIZE + 8, (255, 192, 203)))
@@ -40,6 +39,8 @@ class Load_level():
                     if letter == "T":
                         self.trap.add(ghost_trap.Trap(c * BLOCK_SIZE , r * BLOCK_SIZE, (255, 192, 203)))
 
+                    if letter == "G":
+                        self.ghost.add(ghost.Ghost(c * BLOCK_SIZE , r * BLOCK_SIZE, (255, 192, 203)))
 
 
 
@@ -60,3 +61,6 @@ class Load_level():
 
     def get_trap(self):
         return self.trap
+
+    def get_ghost(self):
+        return self.ghost
