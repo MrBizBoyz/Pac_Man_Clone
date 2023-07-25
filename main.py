@@ -6,6 +6,8 @@ import load_level
 
 
 pygame.init()
+states = 0
+pygame.mouse.set_visible(False)
 
 clock = pygame.time.Clock()
 pygame.mouse.set_visible(False)
@@ -15,6 +17,11 @@ flash_timer = 0
 FLASH_INTERVAL = 300
 player_group = pygame.sprite.Group()
 map = load_level.Load_level()
+background1_image = pygame.image.load("menu.png").convert()
+background2_image = pygame.image.load("pause.png").convert()
+
+
+
 
 
 plyr = player.Player(32, 32)
@@ -24,6 +31,11 @@ player_group.add(plyr)
 def main():
     global states
     running = True
+    if states == 0:
+        menu()
+
+    if states == 2:
+        pause()
     start = 0
 
 
@@ -40,38 +52,68 @@ def main():
                 if event.key == pygame.K_q:
                     running = False
 
+                if event.key == pygame.K_p:
+
+                    if states == 1:
+                        states = 2
+
+                    elif states == 2:
+                        states = 1
+
+
+                if event.key == pygame.K_SPACE:
+                    if states == 0:
+                        states = 1
+
+
         draw()
         update()
 
     pygame.quit()
 
 def draw():
-    global flashing, flash_timer
-
-    surface.fill((0, 0, 0))
-    player_group.draw(surface)
-    map.get_blocks().draw(surface)
-    map.get_dots().draw(surface)
-    map.get_big_dots().draw(surface)
-    map.get_trap().draw(surface)
-    map.get_ghost().draw(surface)
-
-
-    draw_scores()
-    draw_text()
-
-    current_time = pygame.time.get_ticks()
-    if current_time - flash_timer >= FLASH_INTERVAL:
-        flashing = not flashing
-        flash_timer = current_time
+    global flashing, flash_timer, states
+    if states == 0:
+        menu()
+    if states == 1:
+        surface.fill((0, 0, 0))
+        player_group.draw(surface)
+        map.get_blocks().draw(surface)
+        map.get_dots().draw(surface)
+        map.get_big_dots().draw(surface)
+        map.get_trap().draw(surface)
+        map.get_ghost().draw(surface)
 
 
+        draw_scores()
+        draw_text()
+
+        current_time = pygame.time.get_ticks()
+        if current_time - flash_timer >= FLASH_INTERVAL:
+            flashing = not flashing
+            flash_timer = current_time
+
+    if states == 2:
+        pause()
     pygame.display.flip()
 
 def update():
-    player_group.update(map.get_blocks(), map.get_dots(), map.get_big_dots(), map.get_ghost())
-    map.get_ghost().update(player_group)
+    global states
+    if states == 0:
+        pass
+    if states == 1:
+
+        player_group.update(map.get_blocks(), map.get_dots(), map.get_big_dots(), map.get_ghost())
+        map.get_ghost().update(player_group)
     # map.get_trap().update()
+
+def menu():
+    surface.blit(background1_image, [0, 0])
+
+
+
+def pause():
+    surface.blit(background2_image, [0, 0])
 
 
 
